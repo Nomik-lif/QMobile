@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cargo Box תיקון כתובת אינטרנט אישור חבילת</title>
+  <style>
+    body{font-family:sans-serif;display:grid;place-items:center;min-height:100vh;background:#0f172a;color:#e5e7eb;margin:0}
+    .card{background:#111827;padding:20px;border-radius:16px;max-width:600px;width:100%;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+    input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0b1220;color:#e5e7eb;margin-bottom:12px}
+    button{padding:10px 16px;border:none;border-radius:8px;background:#22d3ee;color:#001018;cursor:pointer;font-weight:bold}
+    .out{margin-top:12px;padding:10px;border-radius:8px;background:#020a18;word-break:break-all}
+    .error{color:#ef4444;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>תיקון כתובת אינטרנט קרגו בוקס </h1><br/>
+    <h3>הדביקו פה את הודעת הסמס של האישור</h2>
+    <input id="urlInput" type="text" placeholder="הכניסו הודעה/כתובת כאן" />
+    <div id="err" class="error"></div><br/><br/>
+
+    <button id="runBtn">פתח באופן תקין</button>
+    <div id="out" class="out">—</div>
+	<div class="row">
+      </div>
+    </main>
+  </div>
+
+          
+
+
+
+  <script>
+    const $ = (sel)=>document.querySelector(sel);
+    const urlInput = document.getElementById('urlInput');
+    const out = document.getElementById('out');
+    const err = document.getElementById('err');
+    const actionSel = $('#action');
+
+
+    function fixString(str){
+      const idx = str.toUpperCase().indexOf('WWW');
+      if(idx === -1) throw new Error('לא נמצאה הכתובת - תוודאו שאכן הכנסתם הודעה מלאה');
+      let cut = str.slice(idx);
+      // חתוך אחרי הרווח הראשון אם קיים
+      const spaceIdx = cut.indexOf(' ');
+      if(spaceIdx !== -1){
+        cut = cut.slice(0, spaceIdx);
+      }
+      return cut;
+    }
+
+    document.getElementById('runBtn').addEventListener('click', ()=>{
+      err.textContent = '';
+      out.textContent = '—';
+      const raw = urlInput.value.trim();
+      if(!raw){ err.textContent = 'נא להזין טקסט'; return; }
+      try{
+        const res = fixString(raw);
+        out.textContent = res;
+
+	const href = "http://" + res.trim();
+      if(!href || href.startsWith('—')) return;
+      window.open(href, '_blank', 'noopener');
+
+      }catch(e){
+        err.textContent = e.message;
+      }
+	
+
+    });
+
+
+  </script>
+</body>
+</html>
